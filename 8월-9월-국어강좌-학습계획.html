@@ -1,0 +1,623 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>국어 강좌 학습 계획 | 8월~9월</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root {
+      --ink: #172033;
+      --muted: #657089;
+      --line: #dce3ef;
+      --paper: #ffffff;
+      --bg: #f4f7fb;
+      --blue: #356ae6;
+      --blue-soft: #eaf0ff;
+      --green: #168a68;
+      --orange: #c86d16;
+      --shadow: 0 14px 35px rgba(33, 53, 92, .09);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--bg);
+      font-family: "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+      line-height: 1.6;
+    }
+    .wrap { width: min(1080px, calc(100% - 32px)); margin: 0 auto; }
+    header {
+      padding: 48px 0 38px;
+      color: #fff;
+      background: linear-gradient(135deg, #2149a8, #4e7ff0);
+    }
+    h1 { margin: 0 0 8px; font-size: clamp(28px, 5vw, 46px); letter-spacing: -.04em; }
+    .subtitle { margin: 0; color: #dfe8ff; font-size: 16px; }
+    main { padding: 26px 0 56px; }
+    .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 22px; }
+    .card, .panel {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+    }
+    .card { padding: 18px; }
+    .sync-panel { display: flex; align-items: end; justify-content: space-between; gap: 18px; flex-wrap: wrap; }
+    .sync-copy h2 { margin-bottom: 4px; }
+    .sync-copy p { margin: 0; color: var(--muted); font-size: 13px; }
+    .auth-form { display: flex; align-items: end; gap: 8px; flex-wrap: wrap; }
+    .auth-form label { display: grid; gap: 3px; color: var(--muted); font-size: 12px; }
+    .auth-form input { width: 180px; padding: 9px 10px; border: 1px solid var(--line); border-radius: 9px; font: inherit; }
+    .button { padding: 9px 13px; border: 0; border-radius: 9px; color: #fff; background: var(--blue); font: inherit; font-weight: 700; cursor: pointer; }
+    .button.secondary { color: var(--ink); background: #e9edf5; }
+    .button:disabled { cursor: wait; opacity: .55; }
+    .sync-status { width: 100%; margin: 10px 0 0; color: var(--muted); font-size: 13px; }
+    .card small { display: block; color: var(--muted); font-size: 12px; }
+    .card strong { display: block; margin-top: 3px; font-size: 22px; }
+    .panel { padding: 24px; margin-top: 18px; }
+    h2 { margin: 0 0 15px; font-size: 22px; letter-spacing: -.03em; }
+    h3 { margin: 24px 0 10px; font-size: 17px; }
+    .course-list { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .course { padding: 16px; border-radius: 14px; background: #f8faff; border: 1px solid #e4eaff; }
+    .course b { display: block; margin-bottom: 4px; }
+    .course span { color: var(--muted); font-size: 14px; }
+    .phase-title { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .tag { padding: 3px 9px; border-radius: 999px; color: var(--blue); background: var(--blue-soft); font-size: 12px; font-weight: 700; }
+    .tag.green { color: var(--green); background: #e6f7f1; }
+    .target { margin: 0 0 16px; color: var(--muted); }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { padding: 11px 10px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { color: var(--muted); background: #f8faff; font-size: 12px; }
+    td:first-child { white-space: nowrap; font-weight: 700; }
+    td:last-child, th:last-child { text-align: center; width: 64px; }
+    tr.done td:not(:last-child) { color: #8a94a7; text-decoration: line-through; }
+    input[type="checkbox"] { width: 19px; height: 19px; accent-color: var(--blue); cursor: pointer; }
+    .progress-wrap { margin: 12px 0 4px; }
+    .progress-label { display: flex; justify-content: space-between; color: var(--muted); font-size: 13px; }
+    .progress { height: 10px; overflow: hidden; border-radius: 99px; background: #e7ecf4; }
+    .progress > i { display: block; width: 0; height: 100%; background: linear-gradient(90deg, #356ae6, #65a7f8); transition: width .25s ease; }
+    .rules { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .rule { padding: 14px; border-radius: 12px; background: #fff8ed; color: #744517; }
+    .rule b { display: block; margin-bottom: 3px; color: var(--orange); }
+    details { margin-top: 12px; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; background: #fbfcff; }
+    summary { padding: 14px 16px; cursor: pointer; font-weight: 700; list-style-position: inside; }
+    details[open] summary { border-bottom: 1px solid var(--line); color: var(--blue); background: #f5f8ff; }
+    .detail-note { margin: 0; padding: 10px 16px 0; color: var(--muted); font-size: 13px; }
+    .detail-button { width: 100%; padding: 0; border: 0; color: inherit; background: transparent; font: inherit; text-align: left; cursor: pointer; }
+    .detail-button::after { content: "  ▸ 정보 보기"; color: var(--blue); font-size: 12px; font-weight: 700; }
+    .detail-button:hover { color: var(--blue); }
+    dialog { width: min(500px, calc(100% - 28px)); padding: 0; border: 0; border-radius: 18px; color: var(--ink); box-shadow: 0 24px 70px rgba(14, 30, 66, .28); }
+    dialog::backdrop { background: rgba(17, 29, 58, .48); }
+    .modal-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 22px 22px 14px; background: linear-gradient(135deg, #edf2ff, #fff); }
+    .modal-head h2 { margin: 0; font-size: 21px; }
+    .modal-date { margin: 2px 0 0; color: var(--muted); font-size: 13px; }
+    .modal-close { width: 32px; height: 32px; border: 0; border-radius: 50%; color: var(--muted); background: #fff; font-size: 20px; cursor: pointer; }
+    .modal-body { padding: 18px 22px 22px; }
+    .info-list { display: grid; gap: 11px; margin: 0; }
+    .info-list div { padding: 11px 13px; border-radius: 11px; background: #f7f9fd; }
+    .info-list dt { color: var(--muted); font-size: 12px; }
+    .info-list dd { margin: 2px 0 0; font-weight: 700; }
+    .modal-table-wrap { overflow-x: auto; margin-top: 5px; border: 1px solid var(--line); border-radius: 10px; background: #fff; }
+    .modal-table-wrap table { min-width: 390px; font-size: 13px; }
+    .modal-table-wrap th, .modal-table-wrap td { padding: 8px; }
+    .modal-table-wrap th:last-child, .modal-table-wrap td:last-child { width: 54px; text-align: center; }
+    .links a { color: var(--blue); }
+    footer { padding: 0 0 32px; color: var(--muted); font-size: 12px; }
+    @media (max-width: 760px) {
+      .grid, .course-list, .rules { grid-template-columns: 1fr 1fr; }
+      .panel { padding: 17px; }
+      table { min-width: 610px; }
+      .table-scroll { overflow-x: auto; }
+    }
+    @media (max-width: 480px) {
+      .grid, .course-list, .rules { grid-template-columns: 1fr; }
+      .wrap { width: min(100% - 20px, 1080px); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>국어 강좌 학습 계획</h1>
+      <p class="subtitle">8월 17일까지 집중 학습 · 9월 말까지 여유 있게 마무리</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="panel sync-panel" aria-label="모바일 동기화">
+      <div class="sync-copy">
+        <h2>모바일·PC 동기화</h2>
+        <p>아들과 부모가 각자 로그인하면 강의 체크가 함께 업데이트됨.</p>
+      </div>
+      <form class="auth-form" id="auth-form">
+        <label>이메일<input id="auth-email" type="email" autocomplete="username" required></label>
+        <label>비밀번호<input id="auth-password" type="password" autocomplete="current-password" required></label>
+        <button class="button" id="login-button" type="submit">로그인</button>
+        <button class="button secondary" id="logout-button" type="button" hidden>로그아웃</button>
+      </form>
+      <p class="sync-status" id="sync-status">동기화 준비 중...</p>
+    </section>
+
+    <section class="grid" aria-label="계획 요약">
+      <div class="card"><small>집중 학습</small><strong>8/3~8/17</strong></div>
+      <div class="card"><small>마무리 학습</small><strong>9/1~9/30</strong></div>
+      <div class="card"><small>8월 17일 목표</small><strong>64강</strong></div>
+      <div class="card"><small>전체 분량</small><strong>113강</strong></div>
+    </section>
+
+    <section class="panel">
+      <h2>대상 강좌</h2>
+      <div class="course-list">
+        <div class="course">
+          <b>필독 중학 국어 문학 2</b>
+          <span>박소연 · OT + 31강 · 8월 17일까지 완료</span>
+        </div>
+        <div class="course">
+          <b>필독 중학 국어 문법(2022개정)</b>
+          <span>정미나 · OT + 80강 · 9월 30일까지 완료</span>
+        </div>
+      </div>
+      <p class="links">강좌 링크: <a href="https://mid.ebs.co.kr/course/view?courseId=100004453&left=grade" target="_blank" rel="noreferrer">문학 2</a> · <a href="https://mid.ebs.co.kr/course/view?courseId=100006192" target="_blank" rel="noreferrer">문법</a></p>
+    </section>
+
+    <section class="panel">
+      <div class="phase-title"><h2>1단계. 방학 집중 학습</h2><span class="tag">8/3~8/17</span></div>
+      <p class="target">문학 OT~31강 완료, 문법 OT~31강 완료. 총 64강.</p>
+      <div class="progress-wrap">
+        <div class="progress-label"><span>1단계 진행률</span><span id="phase1-count">0 / 64</span></div>
+        <div class="progress"><i id="phase1-bar"></i></div>
+      </div>
+      <h3>주간 목표</h3>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>기간</th><th>학습 목표</th><th>완료</th></tr></thead>
+          <tbody>
+            <tr data-check="p1w1"><td>8/3~8/9</td><td>문학 OT~15강, 문법 1~14강</td><td><input type="checkbox" aria-label="8월 3일~9일 완료"></td></tr>
+            <tr data-check="p1w2"><td>8/10~8/17</td><td>문학 16~31강, 문법 15~32강</td><td><input type="checkbox" aria-label="8월 10일~17일 완료"></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>하루 운영</h3>
+      <div class="rules">
+        <div class="rule"><b>월·수·금</b>오전 4강. 오후·저녁 수학 학원 전 학습.</div>
+        <div class="rule"><b>화·목</b>오전 2강 + 영어 학원 후 저녁 1강.</div>
+        <div class="rule"><b>토·일</b>오전 3강 + 오후 3강. 10분 휴식 포함.</div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>주간별 세부 계획</h2>
+      <p class="target">날짜별 강의 범위. 체크 상태는 브라우저에 저장됨.</p>
+
+      <details open>
+        <summary>1주차 · 8월 3일~9일 · 문학 OT~15강 + 문법 1~14강</summary>
+        <p class="detail-note">방학 초반. 월·수·금 오전 집중, 주말 6강.</p>
+        <div class="table-scroll"><table><thead><tr><th>날짜</th><th>학원 일정</th><th>상세 학습</th><th>완료</th></tr></thead><tbody>
+          <tr data-check="d0803"><td>8/3 월</td><td>수학 13~17시, 18~22시</td><td>문학 OT, 1~2강 · 문법 1강</td><td><input type="checkbox" aria-label="8월 3일 완료"></td></tr>
+          <tr data-check="d0804"><td>8/4 화</td><td>영어 16~18시</td><td>문학 3~5강</td><td><input type="checkbox" aria-label="8월 4일 완료"></td></tr>
+          <tr data-check="d0805"><td>8/5 수</td><td>수학 13~17시, 18~22시</td><td>문학 6~8강 · 문법 2강</td><td><input type="checkbox" aria-label="8월 5일 완료"></td></tr>
+          <tr data-check="d0806"><td>8/6 목</td><td>영어 16~18시</td><td>문학 9~11강</td><td><input type="checkbox" aria-label="8월 6일 완료"></td></tr>
+          <tr data-check="d0807"><td>8/7 금</td><td>수학 13~17시, 18~22시</td><td>문학 12~15강</td><td><input type="checkbox" aria-label="8월 7일 완료"></td></tr>
+          <tr data-check="d0808"><td>8/8 토</td><td>학원 없음</td><td>문법 3~8강</td><td><input type="checkbox" aria-label="8월 8일 완료"></td></tr>
+          <tr data-check="d0809"><td>8/9 일</td><td>학원 없음</td><td>문법 9~14강</td><td><input type="checkbox" aria-label="8월 9일 완료"></td></tr>
+        </tbody></table></div>
+      </details>
+
+      <details>
+        <summary>2주차 · 8월 10일~17일 · 문학 16~31강 + 문법 15~32강</summary>
+        <p class="detail-note">8월 17일까지 문학 전체 완료. 방학 마지막 날 문학 마무리.</p>
+        <div class="table-scroll"><table><thead><tr><th>날짜</th><th>학원 일정</th><th>상세 학습</th><th>완료</th></tr></thead><tbody>
+          <tr data-check="d0810"><td>8/10 월</td><td>수학 13~17시, 18~22시</td><td>문법 15~18강</td><td><input type="checkbox" aria-label="8월 10일 완료"></td></tr>
+          <tr data-check="d0811"><td>8/11 화</td><td>영어 16~18시</td><td>문법 19~21강</td><td><input type="checkbox" aria-label="8월 11일 완료"></td></tr>
+          <tr data-check="d0812"><td>8/12 수</td><td>수학 13~17시, 18~22시</td><td>문법 22~25강</td><td><input type="checkbox" aria-label="8월 12일 완료"></td></tr>
+          <tr data-check="d0813"><td>8/13 목</td><td>영어 16~18시</td><td>문법 26~28강</td><td><input type="checkbox" aria-label="8월 13일 완료"></td></tr>
+          <tr data-check="d0814"><td>8/14 금</td><td>수학 13~17시, 18~22시</td><td>문법 29~32강</td><td><input type="checkbox" aria-label="8월 14일 완료"></td></tr>
+          <tr data-check="d0815"><td>8/15 토</td><td>학원 없음</td><td>문학 16~21강</td><td><input type="checkbox" aria-label="8월 15일 완료"></td></tr>
+          <tr data-check="d0816"><td>8/16 일</td><td>학원 없음</td><td>문학 22~27강</td><td><input type="checkbox" aria-label="8월 16일 완료"></td></tr>
+          <tr data-check="d0817"><td>8/17 월</td><td>수학 13~17시, 18~22시</td><td>문학 28~31강</td><td><input type="checkbox" aria-label="8월 17일 완료"></td></tr>
+        </tbody></table></div>
+      </details>
+
+      <details>
+        <summary>3주차 · 9월 1일~6일 · 문법 32~43강</summary>
+        <p class="detail-note">개학 후 적응 주간. 하루 2강 중심.</p>
+        <div class="table-scroll"><table><thead><tr><th>날짜</th><th>학원 일정</th><th>상세 학습</th><th>완료</th></tr></thead><tbody>
+          <tr data-check="d0901"><td>9/1 화</td><td>영어 16~18시</td><td>문법 32~33강</td><td><input type="checkbox" aria-label="9월 1일 완료"></td></tr>
+          <tr data-check="d0902"><td>9/2 수</td><td>수학 13~17시, 18~22시</td><td>문법 34~35강</td><td><input type="checkbox" aria-label="9월 2일 완료"></td></tr>
+          <tr data-check="d0903"><td>9/3 목</td><td>영어 16~18시</td><td>문법 36~37강</td><td><input type="checkbox" aria-label="9월 3일 완료"></td></tr>
+          <tr data-check="d0904"><td>9/4 금</td><td>수학 13~17시, 18~22시</td><td>문법 38~39강</td><td><input type="checkbox" aria-label="9월 4일 완료"></td></tr>
+          <tr data-check="d0905"><td>9/5 토</td><td>학원 없음</td><td>문법 40~41강</td><td><input type="checkbox" aria-label="9월 5일 완료"></td></tr>
+          <tr data-check="d0906"><td>9/6 일</td><td>학원 없음</td><td>문법 42~43강</td><td><input type="checkbox" aria-label="9월 6일 완료"></td></tr>
+        </tbody></table></div>
+      </details>
+
+      <details>
+        <summary>4주차 · 9월 7일~13일 · 문법 44~55강</summary>
+        <div class="table-scroll"><table><thead><tr><th>날짜</th><th>학원 일정</th><th>상세 학습</th><th>완료</th></tr></thead><tbody>
+          <tr data-check="d0907"><td>9/7 월</td><td>수학 13~17시, 18~22시</td><td>문법 44~45강</td><td><input type="checkbox" aria-label="9월 7일 완료"></td></tr>
+          <tr data-check="d0908"><td>9/8 화</td><td>영어 16~18시</td><td>문법 46~47강</td><td><input type="checkbox" aria-label="9월 8일 완료"></td></tr>
+          <tr data-check="d0909"><td>9/9 수</td><td>수학 13~17시, 18~22시</td><td>문법 48~49강</td><td><input type="checkbox" aria-label="9월 9일 완료"></td></tr>
+          <tr data-check="d0910"><td>9/10 목</td><td>영어 16~18시</td><td>문법 50~51강</td><td><input type="checkbox" aria-label="9월 10일 완료"></td></tr>
+          <tr data-check="d0911"><td>9/11 금</td><td>수학 13~17시, 18~22시</td><td>문법 52~53강</td><td><input type="checkbox" aria-label="9월 11일 완료"></td></tr>
+          <tr data-check="d0912"><td>9/12 토</td><td>학원 없음</td><td>문법 54강</td><td><input type="checkbox" aria-label="9월 12일 완료"></td></tr>
+          <tr data-check="d0913"><td>9/13 일</td><td>학원 없음</td><td>문법 55강</td><td><input type="checkbox" aria-label="9월 13일 완료"></td></tr>
+        </tbody></table></div>
+      </details>
+
+      <details>
+        <summary>5주차 · 9월 14일~20일 · 문법 56~67강</summary>
+        <div class="table-scroll"><table><thead><tr><th>날짜</th><th>학원 일정</th><th>상세 학습</th><th>완료</th></tr></thead><tbody>
+          <tr data-check="d0914"><td>9/14 월</td><td>수학 13~17시, 18~22시</td><td>문법 56~57강</td><td><input type="checkbox" aria-label="9월 14일 완료"></td></tr>
+          <tr data-check="d0915"><td>9/15 화</td><td>영어 16~18시</td><td>문법 58~59강</td><td><input type="checkbox" aria-label="9월 15일 완료"></td></tr>
+          <tr data-check="d0916"><td>9/16 수</td><td>수학 13~17시, 18~22시</td><td>문법 60~61강</td><td><input type="checkbox" aria-label="9월 16일 완료"></td></tr>
+          <tr data-check="d0917"><td>9/17 목</td><td>영어 16~18시</td><td>문법 62~63강</td><td><input type="checkbox" aria-label="9월 17일 완료"></td></tr>
+          <tr data-check="d0918"><td>9/18 금</td><td>수학 13~17시, 18~22시</td><td>문법 64~65강</td><td><input type="checkbox" aria-label="9월 18일 완료"></td></tr>
+          <tr data-check="d0919"><td>9/19 토</td><td>학원 없음</td><td>문법 66강</td><td><input type="checkbox" aria-label="9월 19일 완료"></td></tr>
+          <tr data-check="d0920"><td>9/20 일</td><td>학원 없음</td><td>문법 67강</td><td><input type="checkbox" aria-label="9월 20일 완료"></td></tr>
+        </tbody></table></div>
+      </details>
+
+      <details>
+        <summary>6주차 · 9월 21일~27일 · 문법 68~79강</summary>
+        <div class="table-scroll"><table><thead><tr><th>날짜</th><th>학원 일정</th><th>상세 학습</th><th>완료</th></tr></thead><tbody>
+          <tr data-check="d0921"><td>9/21 월</td><td>수학 13~17시, 18~22시</td><td>문법 68~69강</td><td><input type="checkbox" aria-label="9월 21일 완료"></td></tr>
+          <tr data-check="d0922"><td>9/22 화</td><td>영어 16~18시</td><td>문법 70~71강</td><td><input type="checkbox" aria-label="9월 22일 완료"></td></tr>
+          <tr data-check="d0923"><td>9/23 수</td><td>수학 13~17시, 18~22시</td><td>문법 72~73강</td><td><input type="checkbox" aria-label="9월 23일 완료"></td></tr>
+          <tr data-check="d0924"><td>9/24 목</td><td>영어 16~18시</td><td>문법 74~75강</td><td><input type="checkbox" aria-label="9월 24일 완료"></td></tr>
+          <tr data-check="d0925"><td>9/25 금</td><td>수학 13~17시, 18~22시</td><td>문법 76~77강</td><td><input type="checkbox" aria-label="9월 25일 완료"></td></tr>
+          <tr data-check="d0926"><td>9/26 토</td><td>학원 없음</td><td>문법 78강</td><td><input type="checkbox" aria-label="9월 26일 완료"></td></tr>
+          <tr data-check="d0927"><td>9/27 일</td><td>학원 없음</td><td>문법 79강</td><td><input type="checkbox" aria-label="9월 27일 완료"></td></tr>
+        </tbody></table></div>
+      </details>
+
+      <details>
+        <summary>7주차 · 9월 28일~30일 · 문법 80강 + 전체 복습</summary>
+        <div class="table-scroll"><table><thead><tr><th>날짜</th><th>학원 일정</th><th>상세 학습</th><th>완료</th></tr></thead><tbody>
+          <tr data-check="d0928"><td>9/28 월</td><td>수학 13~17시, 18~22시</td><td>문법 80강</td><td><input type="checkbox" aria-label="9월 28일 완료"></td></tr>
+          <tr data-check="d0929"><td>9/29 화</td><td>영어 16~18시</td><td>문법 1~40강 핵심 복습</td><td><input type="checkbox" aria-label="9월 29일 완료"></td></tr>
+          <tr data-check="d0930"><td>9/30 수</td><td>수학 13~17시, 18~22시</td><td>문법 41~80강 핵심 복습 및 미수강 보충</td><td><input type="checkbox" aria-label="9월 30일 완료"></td></tr>
+        </tbody></table></div>
+      </details>
+    </section>
+
+    <section class="panel">
+      <div class="phase-title"><h2>2단계. 개학 후 마무리</h2><span class="tag green">9/1~9/30</span></div>
+      <p class="target">문법 32~80강 완료. 평일 2강, 주말 3강. 9월 마지막 3일은 보충·복습.</p>
+      <div class="progress-wrap">
+        <div class="progress-label"><span>2단계 진행률</span><span id="phase2-count">0 / 49</span></div>
+        <div class="progress"><i id="phase2-bar"></i></div>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>기간</th><th>학습 목표</th><th>완료</th></tr></thead>
+          <tbody>
+            <tr data-check="p2w1"><td>9/1~9/6</td><td>문법 32~43강</td><td><input type="checkbox" aria-label="9월 1일~6일 완료"></td></tr>
+            <tr data-check="p2w2"><td>9/7~9/13</td><td>문법 44~55강</td><td><input type="checkbox" aria-label="9월 7일~13일 완료"></td></tr>
+            <tr data-check="p2w3"><td>9/14~9/20</td><td>문법 56~67강</td><td><input type="checkbox" aria-label="9월 14일~20일 완료"></td></tr>
+            <tr data-check="p2w4"><td>9/21~9/27</td><td>문법 68~79강</td><td><input type="checkbox" aria-label="9월 21일~27일 완료"></td></tr>
+            <tr data-check="p2w5"><td>9/28~9/30</td><td>문법 80강 + 전체 복습</td><td><input type="checkbox" aria-label="9월 28일~30일 완료"></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>완료 기준</h2>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>날짜</th><th>목표</th><th>완료</th></tr></thead>
+          <tbody>
+            <tr data-check="final1"><td>8월 17일</td><td>문학 2 전체, 문법 31강까지</td><td><input type="checkbox" aria-label="8월 17일 목표 완료"></td></tr>
+            <tr data-check="final2"><td>9월 27일</td><td>문법 79강까지</td><td><input type="checkbox" aria-label="9월 27일 목표 완료"></td></tr>
+            <tr data-check="final3"><td>9월 30일</td><td>문법 전체 및 전체 복습</td><td><input type="checkbox" aria-label="9월 30일 목표 완료"></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="target">강의 미달 시 다음 평일 1강 추가. 3강 이상 밀리면 다음 주말에 보충.</p>
+    </section>
+  </main>
+
+  <dialog id="lesson-dialog" aria-labelledby="dialog-title">
+    <div class="modal-head">
+      <div><h2 id="dialog-title">오늘 학습 정보</h2><p class="modal-date" id="dialog-date"></p></div>
+      <button class="modal-close" type="button" aria-label="닫기">×</button>
+    </div>
+    <div class="modal-body">
+      <dl class="info-list">
+        <div><dt>오늘 듣는 강좌</dt><dd id="dialog-course"></dd></div>
+        <div><dt>강의 범위</dt><dd id="dialog-lessons"></dd></div>
+        <div><dt>예상 시청 시간</dt><dd id="dialog-time"></dd></div>
+        <div><dt>학원 일정</dt><dd id="dialog-academy"></dd></div>
+        <div><dt>오늘 학습 방법</dt><dd id="dialog-tip"></dd></div>
+      </dl>
+    </div>
+  </dialog>
+
+  <footer class="wrap">체크 상태는 현재 브라우저에 자동 저장됨.</footer>
+
+  <script>
+    const SUPABASE_URL = 'https://bhqkewqmshlvzdnnijma.supabase.co';
+    const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_lFKAGieBnXJRPRQQDmLfmQ_axQp89ev';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+    let currentUser = null;
+    let realtimeChannel = null;
+    const checks = [...document.querySelectorAll('tr[data-check] input')];
+    const saved = JSON.parse(localStorage.getItem('korean-course-plan-2026') || '{}');
+    const authForm = document.querySelector('#auth-form');
+    const authEmail = document.querySelector('#auth-email');
+    const authPassword = document.querySelector('#auth-password');
+    const loginButton = document.querySelector('#login-button');
+    const logoutButton = document.querySelector('#logout-button');
+    const syncStatus = document.querySelector('#sync-status');
+
+    function setSyncStatus(message, error = false) {
+      syncStatus.textContent = message;
+      syncStatus.style.color = error ? '#b43d3d' : '';
+    }
+
+    async function syncProgress(key, completed) {
+      if (!currentUser) return;
+      const { error } = await supabaseClient.from('study_progress').upsert({
+        id: key,
+        completed,
+        updated_at: new Date().toISOString(),
+        updated_by: currentUser.id
+      });
+      if (error) setSyncStatus(`동기화 실패: ${error.message}`, true);
+    }
+
+    function applySavedToUI() {
+      document.querySelectorAll('tr[data-check] input[type="checkbox"]').forEach((box) => {
+        const key = box.closest('tr').dataset.check;
+        box.checked = Boolean(saved[key]);
+        box.closest('tr').classList.toggle('done', box.checked);
+      });
+      document.querySelectorAll('.lecture-check').forEach((box) => {
+        box.checked = Boolean(saved[box.dataset.lectureKey]);
+      });
+      document.querySelectorAll('tr[data-check^="d"]').forEach((row) => {
+        const items = catalogRows(row.querySelector('td:nth-child(3)').textContent);
+        if (items.length && items.every((item) => saved[lectureKey(row, item)])) {
+          saved[row.dataset.check] = true;
+          const outer = row.querySelector('td:last-child input[type="checkbox"]');
+          outer.checked = true;
+          row.classList.add('done');
+        }
+      });
+      updateProgress();
+    }
+
+    async function loadRemoteProgress() {
+      const { data, error } = await supabaseClient.from('study_progress').select('id, completed, updated_at');
+      if (error) {
+        setSyncStatus(`원격 데이터 불러오기 실패: ${error.message}`, true);
+        return;
+      }
+      data.forEach((item) => { saved[item.id] = item.completed; });
+      localStorage.setItem('korean-course-plan-2026', JSON.stringify(saved));
+      applySavedToUI();
+      setSyncStatus(`동기화됨 · ${currentUser.email}`);
+    }
+
+    function startRealtimeSync() {
+      if (realtimeChannel) supabaseClient.removeChannel(realtimeChannel);
+      realtimeChannel = supabaseClient.channel('study-progress-updates')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'study_progress' }, (payload) => {
+          const item = payload.new;
+          if (!item?.id || item.updated_by === currentUser?.id) return;
+          saved[item.id] = item.completed;
+          localStorage.setItem('korean-course-plan-2026', JSON.stringify(saved));
+          applySavedToUI();
+          setSyncStatus(`새 업데이트 반영됨 · ${new Date().toLocaleTimeString('ko-KR')}`);
+        })
+        .subscribe();
+    }
+
+    async function handleAuthState(session) {
+      currentUser = session?.user || null;
+      const loggedIn = Boolean(currentUser);
+      authEmail.disabled = loggedIn;
+      authPassword.disabled = loggedIn;
+      loginButton.hidden = loggedIn;
+      logoutButton.hidden = !loggedIn;
+      if (loggedIn) {
+        await loadRemoteProgress();
+        startRealtimeSync();
+      } else {
+        if (realtimeChannel) supabaseClient.removeChannel(realtimeChannel);
+        setSyncStatus('로그인하면 모바일·PC 동기화 시작');
+      }
+    }
+
+    authForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      loginButton.disabled = true;
+      setSyncStatus('로그인 중...');
+      const { data, error } = await supabaseClient.auth.signInWithPassword({
+        email: authEmail.value.trim(),
+        password: authPassword.value
+      });
+      loginButton.disabled = false;
+      if (error) setSyncStatus(`로그인 실패: ${error.message}`, true);
+      else await handleAuthState(data.session);
+    });
+
+    logoutButton.addEventListener('click', async () => {
+      await supabaseClient.auth.signOut();
+      await handleAuthState(null);
+    });
+
+    supabaseClient.auth.onAuthStateChange((_event, session) => handleAuthState(session));
+    supabaseClient.auth.getSession().then(({ data }) => handleAuthState(data.session));
+
+    checks.forEach((box) => {
+      const row = box.closest('tr');
+      const key = row.dataset.check;
+      box.checked = Boolean(saved[key]);
+      row.classList.toggle('done', box.checked);
+      box.addEventListener('change', () => {
+        saved[key] = box.checked;
+        if (key.startsWith('d')) setRowLectureChecks(row, box.checked);
+        localStorage.setItem('korean-course-plan-2026', JSON.stringify(saved));
+        syncProgress(key, box.checked);
+        row.classList.toggle('done', box.checked);
+        updateProgress();
+      });
+    });
+
+    const dialog = document.querySelector('#lesson-dialog');
+    const dialogClose = dialog.querySelector('.modal-close');
+    const lectureCatalog = {
+      grammar: [
+        ['OT', '오리엔테이션', '5분'],
+        ['01강', '국어의 음운 체계 1_모음(1)', '29분'], ['02강', '국어의 음운 체계 1_모음(2)', '29분'],
+        ['03강', '국어의 음운 체계 2_자음(1)', '29분'], ['04강', '국어의 음운 체계 2_자음(2)', '29분'],
+        ['05강', '음운의 변동 1_교체(1)', '29분'], ['06강', '음운의 변동 1_교체(2)', '29분'], ['07강', '음운의 변동 1_교체(3)', '29분'],
+        ['08강', '음운의 변동 2_탈락, 축약, 첨가(1)', '29분'], ['09강', '음운의 변동 2_탈락, 축약, 첨가(2)', '29분'], ['10강', '음운의 변동 2_탈락, 축약, 첨가(3)', '29분'],
+        ['11강', '음운의 변동 3_표준 발음법(1)', '29분'], ['12강', '음운의 변동 3_표준 발음법(2)', '29분'], ['13강', '음운의 변동 3_표준 발음법(3)', '29분'],
+        ['14강', '한글의 창제 정신과 제자 원리(1)', '29분'], ['15강', '한글의 창제 정신과 제자 원리(2)', '28분'], ['16강', '1단원 종합 평가(1)', '29분'], ['17강', '1단원 종합 평가(2)', '28분'],
+        ['18강', '품사의 종류와 특성 1_체언(1)', '28분'], ['19강', '품사의 종류와 특성 1_체언(2)', '28분'], ['20강', '품사의 종류와 특성 1_체언(3)', '28분'],
+        ['21강', '품사의 종류와 특성 2_용언(1)', '29분'], ['22강', '품사의 종류와 특성 2_용언(2)', '29분'], ['23강', '품사의 종류와 특성 2_용언(3)', '28분'], ['24강', '품사의 종류와 특성 2_용언(4)', '29분'],
+        ['25강', '품사의 종류와 특성 3_수식언(1)', '29분'], ['26강', '품사의 종류와 특성 3_수식언(2)', '29분'], ['27강', '품사의 종류와 특성 3_수식언(3)', '29분'],
+        ['28강', '품사의 종류와 특성 4_관계언, 독립언(1)', '29분'], ['29강', '품사의 종류와 특성 4_관계언, 독립언(2)', '29분'], ['30강', '품사의 종류와 특성 4_관계언, 독립언(3)', '29분'],
+        ['31강', '단어의 짜임 1_형태소, 어근과 접사(1)', '29분'], ['32강', '단어의 짜임 1_형태소, 어근과 접사(2)', '29분'], ['33강', '단어의 짜임 1_형태소, 어근과 접사(3)', '29분'],
+        ['34강', '단어의 짜임 2_합성어와 파생어, 새말 형성 방법(1)', '29분'], ['35강', '단어의 짜임 2_합성어와 파생어, 새말 형성 방법(2)', '29분'], ['36강', '단어의 짜임 2_합성어와 파생어, 새말 형성 방법(3)', '29분'],
+        ['37강', '단어 간의 의미 관계 1_유의 관계, 반의 관계, 상하 관계', '29분'], ['38강', '단어 간의 의미 관계 2_동음이의어, 다의어', '29분'], ['39강', '2단원 종합 평가(1)', '29분'], ['40강', '2단원 종합 평가(2)', '29분'],
+        ['41강', '문장과 문장 구성의 단위(1)', '29분'], ['42강', '문장과 문장 구성의 단위(2)', '29분'], ['43강', '문장 성분 1_주성분(1)', '29분'], ['44강', '문장 성분 1_주성분(2)', '28분'],
+        ['45강', '문장 성분 2_부속 성분, 독립 성분(1)', '28분'], ['46강', '문장 성분 2_부속 성분, 독립 성분(2)', '29분'], ['47강', '문장 성분 2_부속 성분, 독립 성분(3)', '29분'],
+        ['48강', '문장의 짜임 1_이어진문장(1)', '29분'], ['49강', '문장의 짜임 1_이어진문장(2)', '29분'], ['50강', '문장의 짜임 1_이어진문장(3)', '28분'],
+        ['51강', '문장의 짜임 2_안은문장, 안긴문장(1)', '29분'], ['52강', '문장의 짜임 2_안은문장, 안긴문장(2)', '28분'], ['53강', '문장의 짜임 2_안은문장, 안긴문장(3)', '28분'],
+        ['54강', '문법 요소와 표현 효과 1_종결 표현, 높임 표현, 시간 표현(1)', '29분'], ['55강', '문법 요소와 표현 효과 1_종결 표현, 높임 표현, 시간 표현(2)', '29분'], ['56강', '문법 요소와 표현 효과 1_종결 표현, 높임 표현, 시간 표현(3)', '28분'],
+        ['57강', '문법 요소와 표현 효과 2_피동 표현, 사동 표현(1)', '28분'], ['58강', '문법 요소와 표현 효과 2_피동 표현, 사동 표현(2)', '28분'], ['59강', '문법 요소와 표현 효과 2_피동 표현, 사동 표현(3)', '28분'],
+        ['60강', '문법 요소와 표현 효과 3_인용 표현, 부정 표현(1)', '29분'], ['61강', '문법 요소와 표현 효과 3_인용 표현, 부정 표현(2)', '28분'], ['62강', '3단원 종합 평가(1)', '28분'], ['63강', '3단원 종합 평가(2)', '28분'],
+        ['64강', '한글 맞춤법과 표준 발음법의 기본 원칙(1)', '29분'], ['65강', '한글 맞춤법과 표준 발음법의 기본 원칙(2)', '28분'], ['66강', '한글 맞춤법과 표준 발음법의 기본 원칙(3)', '28분'],
+        ['67강', '표준어 규정과 한글 맞춤법(1)', '28분'], ['68강', '표준어 규정과 한글 맞춤법(2)', '29분'], ['69강', '표준어 규정과 한글 맞춤법(3)', '28분'],
+        ['70강', '한글 맞춤법의 주요 내용(1)', '28분'], ['71강', '한글 맞춤법의 주요 내용(2)', '28분'], ['72강', '한글 맞춤법의 주요 내용(3)', '29분'],
+        ['73강', '담화의 개념과 특징(1)', '28분'], ['74강', '담화의 개념과 특징(2)', '29분'], ['75강', '세대, 분야, 매체에 따른 어휘의 양상', '28분'],
+        ['76강', '국어의 변화_국어사(1)', '28분'], ['77강', '국어의 변화_국어사(2)', '28분'], ['78강', '국어의 변화_국어사(3)', '28분'], ['79강', '4단원 종합 평가(1)', '28분'], ['80강', '4단원 종합 평가(2)', '29분']
+      ],
+      literature: [
+        ['OT', '오리엔테이션', '5분'], ['01강', '주제로 독해하기 ‘사랑과 그리움’', '39분'], ['02강', '작품 독해하기 — 고향, 가시리', '39분'], ['03강', '작품 독해하기 — 동백꽃', '39분'],
+        ['04강', '작품 독해하기 — 사랑손님과 어머니', '38분'], ['05강', '작품 독해하기 — 춘향전', '38분'], ['06강', '작품 독해하기 — 운영전', '38분'], ['07강', '실전 연습 문제 풀이 1', '39분'], ['08강', '실전 연습 문제 풀이 2', '38분'],
+        ['09강', '주제로 독해하기 ‘자연과 삶’', '38분'], ['10강', '작품 독해하기 — 가난한 사랑 노래, 오우가', '38분'], ['11강', '작품 독해하기 — 자전거 도둑', '38분'], ['12강', '작품 독해하기 — 심청전', '38분'], ['13강', '작품 독해하기 — 일야구도하기', '38분'], ['14강', '실전 연습 문제 풀이 1', '39분'], ['15강', '실전 연습 문제 풀이 2', '39분'],
+        ['16강', '주제로 독해하기 ‘인간과 사회’', '39분'], ['17강', '작품 독해하기 — 성북동 비둘기, 천만리 머나먼 길에', '39분'], ['18강', '작품 독해하기 — 수난이대', '38분'], ['19강', '작품 독해하기 — 홍길동전', '39분'], ['20강', '작품 독해하기 — 들판에서', '38분'], ['21강', '작품 독해하기 — 수필: 당신이 나무를 더 사랑하는 까닭', '39분'], ['22강', '실전 연습 문제 풀이 1', '39분'], ['23강', '실전 연습 문제 풀이 2', '39분'],
+        ['24강', '주제로 독해하기 ‘비판과 풍자’', '38분'], ['25강', '작품 독해하기 — 시조, 현대시: 풀벌레들의 작은 귀를 생각함, 두꺼비 파리를 물고', '38분'], ['26강', '작품 독해하기 — 꺼삐딴 리', '38분'], ['27강', '작품 독해하기 — 유자소전', '38분'], ['28강', '작품 독해하기 — 토끼전', '38분'], ['29강', '작품 독해하기 — 시나리오: 오아시스 세탁소 습격 사건', '39분'], ['30강', '실전 연습 문제 풀이 1', '39분'], ['31강', '실전 연습 문제 풀이 2', '38분']
+      ]
+    };
+
+    function catalogRows(lessons) {
+      const rows = [];
+      const add = (course, item) => { if (item) rows.push({ course, number: item[0], title: item[1], time: item[2] }); };
+      const segments = lessons.split(' · ');
+      segments.forEach((segment) => {
+        const course = segment.includes('문학') ? 'literature' : segment.includes('문법') ? 'grammar' : null;
+        if (!course) return;
+        if (segment.includes('OT')) add(course, lectureCatalog[course][0]);
+        const ranges = [...segment.matchAll(/(\d+)~(\d+)강/g)];
+        ranges.forEach((match) => {
+          for (let number = Number(match[1]); number <= Number(match[2]); number += 1) add(course, lectureCatalog[course][number]);
+        });
+        const withoutRanges = segment.replace(/\d+~\d+강/g, '');
+        [...withoutRanges.matchAll(/(\d+)강/g)].forEach((match) => add(course, lectureCatalog[course][Number(match[1])]));
+      });
+      return rows;
+    }
+
+    document.querySelectorAll('tr[data-check^="d"] td:nth-child(3)').forEach((cell) => {
+      const text = cell.textContent.trim();
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'detail-button';
+      button.textContent = text;
+      button.addEventListener('click', () => openLessonInfo(cell.closest('tr')));
+      cell.replaceChildren(button);
+    });
+
+    function openLessonInfo(row) {
+      const cells = row.querySelectorAll('td');
+      const date = cells[0].textContent.trim();
+      const academy = cells[1].textContent.trim();
+      const lessons = cells[2].textContent.trim();
+      const hasLiterature = lessons.includes('문학');
+      const hasGrammar = lessons.includes('문법');
+      const courses = [];
+      if (hasLiterature) courses.push('필독 중학 국어 문학 2 (강의별 약 38~39분)');
+      if (hasGrammar) courses.push('필독 중학 국어 문법(2022개정) (강의별 약 28~29분)');
+      const count = (lessons.match(/강/g) || []).length;
+      const tip = count >= 4 ? '오전·오후로 나누어 수강하고, 강의마다 핵심 내용 3줄 정리.' : '강의 후 핵심 개념과 작품·문법 포인트를 3줄 정리.';
+      document.querySelector('#dialog-title').textContent = `${date} 학습 정보`;
+      document.querySelector('#dialog-date').textContent = '상세 학습 계획';
+      document.querySelector('#dialog-course').textContent = courses.join(' · ') || '복습 일정';
+      document.querySelector('#dialog-lessons').textContent = lessons;
+      document.querySelector('#dialog-time').textContent = count ? `${count}강 · 강의별 약 28~39분` : '복습 시간 30~40분';
+      document.querySelector('#dialog-academy').textContent = academy;
+      document.querySelector('#dialog-tip').textContent = tip;
+      const rows = catalogRows(lessons);
+      document.querySelector('#dialog-lecture-table')?.remove();
+      if (rows.length) {
+        const table = document.createElement('div');
+        table.id = 'dialog-lecture-table';
+        table.innerHTML = `<dt>오늘 강의 목록</dt><div class="modal-table-wrap"><table><thead><tr><th>번호</th><th>강의명</th><th>시간</th><th>완료</th></tr></thead><tbody>${rows.map((item) => { const key = lectureKey(row, item); const checked = Boolean(saved[key] || row.querySelector('input[type="checkbox"]').checked); if (checked) saved[key] = true; return `<tr><td>${item.number}</td><td>${item.title}</td><td>${item.time}</td><td><input type="checkbox" class="lecture-check" data-lecture-key="${key}" aria-label="${item.number} 완료" ${checked ? 'checked' : ''}></td></tr>`; }).join('')}</tbody></table></div>`;
+        table.className = 'info-list';
+        table.style.marginTop = '12px';
+        document.querySelector('.modal-body').appendChild(table);
+        table.querySelectorAll('.lecture-check').forEach((check) => {
+          check.addEventListener('change', () => {
+            saved[check.dataset.lectureKey] = check.checked;
+            localStorage.setItem('korean-course-plan-2026', JSON.stringify(saved));
+            syncProgress(check.dataset.lectureKey, check.checked);
+            syncOuterCheck(row);
+          });
+        });
+        localStorage.setItem('korean-course-plan-2026', JSON.stringify(saved));
+      }
+      dialog.showModal();
+    }
+
+    function lectureKey(row, item) {
+      return `${row.dataset.check}-${item.course}-${item.number}`;
+    }
+
+    function setRowLectureChecks(row, checked) {
+      catalogRows(row.querySelector('td:nth-child(3)').textContent).forEach((item) => {
+        const key = lectureKey(row, item);
+        saved[key] = checked;
+        syncProgress(key, checked);
+      });
+      const openChecks = dialog.querySelectorAll('.lecture-check');
+      openChecks.forEach((check) => { check.checked = checked; });
+    }
+
+    function syncOuterCheck(row) {
+      const items = catalogRows(row.querySelector('td:nth-child(3)').textContent);
+      const allDone = items.length > 0 && items.every((item) => saved[lectureKey(row, item)]);
+      const outer = row.querySelector('td:last-child input[type="checkbox"]');
+      outer.checked = allDone;
+      saved[row.dataset.check] = allDone;
+      row.classList.toggle('done', allDone);
+      localStorage.setItem('korean-course-plan-2026', JSON.stringify(saved));
+      syncProgress(row.dataset.check, allDone);
+    }
+
+    dialogClose.addEventListener('click', () => dialog.close());
+    dialog.addEventListener('click', (event) => {
+      if (event.target === dialog) dialog.close();
+    });
+
+    function updateProgress() {
+      const phase1 = ['p1w1', 'p1w2'];
+      const phase2 = ['p2w1', 'p2w2', 'p2w3', 'p2w4', 'p2w5'];
+      const count = (keys) => keys.filter((key) => saved[key]).length;
+      const p1 = count(phase1);
+      const p2 = count(phase2);
+      document.querySelector('#phase1-count').textContent = `${p1 * 32} / 64`;
+      document.querySelector('#phase1-bar').style.width = `${p1 / phase1.length * 100}%`;
+      document.querySelector('#phase2-count').textContent = `${p2 * 49 / phase2.length | 0} / 49`;
+      document.querySelector('#phase2-bar').style.width = `${p2 / phase2.length * 100}%`;
+    }
+    updateProgress();
+  </script>
+</body>
+</html>
